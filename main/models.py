@@ -26,9 +26,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     surname = models.CharField(max_length=50, verbose_name='Фамилия')
     user_class = models.CharField(max_length=10, verbose_name='Класс', db_column='класс')
     role = models.CharField(max_length=20, default='user', verbose_name='Роль')
-    study = models.IntegerField(default=0, verbose_name='Учеба', db_column='учеба')
-    fun = models.IntegerField(default=0, verbose_name='Развлечения', db_column='развлечения')
-    health = models.IntegerField(default=0, verbose_name='Здоровье', db_column='здоровье')
+    study = models.IntegerField(default=40, verbose_name='Учеба', db_column='учеба')
+    fun = models.IntegerField(default=40, verbose_name='Развлечения', db_column='развлечения')
+    health = models.IntegerField(default=40, verbose_name='Здоровье', db_column='здоровье')
     points = models.IntegerField(default=0, verbose_name='Количество очков', db_column='количество_очков')
     registration_date = models.DateTimeField(default=timezone.now, verbose_name='Дата регистрации', db_column='дата_регистрации')
     
