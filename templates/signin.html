@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">АВТОРИЗАЦИЯ</h2>
+                
+                <div class="mb-3">
+                    <label class="form-label">Логин</label>
+                    <input class="form-control" id="login" placeholder="Derector228">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-control" id="password" placeholder="**********">
+                </div>
+                
+                <div class="text-center">
+                    <button id="submitButton" type="button" class="btn btn-dark ps-5 pe-5">
+                        Войти в аккаунт
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('submitButton').addEventListener('click', async function() {
+            const login = document.getElementById('login').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/api/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCsrfToken()
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({ login, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    alert(data.error || "Ошибка авторизации");
+                    return;
+                }
+                
+                // Проверяем авторизацию
+                const authCheck = await fetch('/api/check_auth', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                });
+                
+                const authData = await authCheck.json();
+                
+                if (authData.authenticated) {
+                    window.location.href = '/';
+                } else {
+                    alert("Сессия не установилась");
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Ошибка подключения к серверу");
+            }
+        });
+    });
+</script>
+{% endblock %}

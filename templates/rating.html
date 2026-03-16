@@ -1,0 +1,564 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Рейтинг игроков{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Заголовок -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">
+            <i class="bi bi-trophy-fill text-warning me-2"></i>
+            Рейтинг игроков
+        </h1>
+        <p class="lead text-muted">Лучшие ученики школы</p>
+    </div>
+
+    <!-- Топ-3 пьедестал -->
+    <div class="row justify-content-center mb-5" id="top3Container">
+        <div class="col-md-10">
+            <div class="row align-items-end">
+                <!-- 2 место -->
+                <div class="col-md-4 order-md-1 order-2">
+                    <div class="text-center position-relative" id="secondPlace">
+                        <div class="podium-place bg-secondary bg-opacity-10 rounded-4 p-4 mb-3" style="height: 250px;">
+                            <div class="position-absolute top-0 start-50 translate-middle">
+                                <span class="badge bg-secondary text-white fs-5 py-2 px-3 rounded-pill shadow">
+                                    2 место
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column align-items-center justify-content-end h-100">
+                                <div class="avatar-circle mb-3" style="width: 100px; height: 100px; background: linear-gradient(135deg, #6c757d 0%, #495057 100%);">
+                                    <span class="avatar-text text-white fs-3 fw-bold" id="secondAvatar">--</span>
+                                </div>
+                                <h5 class="mb-1 fw-bold" id="secondName">Загрузка...</h5>
+                                <p class="text-muted small mb-2" id="secondClass">-- класс</p>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-secondary fs-6" id="secondPoints">0</span>
+                                    <span class="badge bg-warning bg-opacity-25 text-warning" id="secondLevel">Ур. 1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1 место -->
+                <div class="col-md-4 order-md-2 order-1">
+                    <div class="text-center position-relative" id="firstPlace">
+                        <div class="podium-place bg-warning bg-opacity-10 rounded-4 p-4 mb-3" style="height: 250px;">
+                            <div class="position-absolute top-0 start-50 translate-middle">
+                                <span class="badge bg-warning text-white fs-5 py-2 px-3 rounded-pill shadow-lg">
+                                    👑 1 место
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column align-items-center justify-content-end h-100">
+                                <div class="avatar-circle mb-3" style="width: 100px; height: 100px; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);">
+                                    <span class="avatar-text text-white fs-3 fw-bold" id="firstAvatar">--</span>
+                                </div>
+                                <h4 class="mb-1 fw-bold" id="firstName">Загрузка...</h4>
+                                <p class="text-muted small mb-2" id="firstClass">-- класс</p>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-warning fs-6" id="firstPoints">0</span>
+                                    <span class="badge bg-warning bg-opacity-25 text-warning" id="firstLevel">Ур. 1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 место -->
+                <div class="col-md-4 order-md-3 order-3">
+                    <div class="text-center position-relative" id="thirdPlace">
+                        <div class="podium-place bg-danger bg-opacity-10 rounded-4 p-4 mb-3" style="height: 250px;">
+                            <div class="position-absolute top-0 start-50 translate-middle">
+                                <span class="badge bg-danger text-white fs-5 py-2 px-3 rounded-pill shadow">
+                                    3 место
+                                </span>
+                            </div>
+                            <div class="d-flex flex-column align-items-center justify-content-end h-100">
+                                <div class="avatar-circle mb-3" style="width: 100px; height: 100px; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">
+                                    <span class="avatar-text text-white fs-4 fw-bold" id="thirdAvatar">--</span>
+                                </div>
+                                <h5 class="mb-1 fw-bold" id="thirdName">Загрузка...</h5>
+                                <p class="text-muted small mb-2" id="thirdClass">-- класс</p>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-danger fs-6" id="thirdPoints">0</span>
+                                    <span class="badge bg-danger bg-opacity-25 text-danger" id="thirdLevel">Ур. 1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Фильтры -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <select class="form-select" id="classFilter">
+                                <option value="all">Все классы</option>
+                                <option value="5">5 класс</option>
+                                <option value="6">6 класс</option>
+                                <option value="7">7 класс</option>
+                                <option value="8">8 класс</option>
+                                <option value="9">9 класс</option>
+                                <option value="10">10 класс</option>
+                                <option value="11">11 класс</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" id="sortFilter">
+                                <option value="points">По очкам ▼</option>
+                                <option value="level">По уровню</option>
+                                <option value="name">По имени</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="searchInput" placeholder="🔍 Поиск по имени...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Таблица рейтинга -->
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-4 py-3">#</th>
+                                    <th class="py-3">Игрок</th>
+                                    <th class="py-3">Класс</th>
+                                    <th class="py-3 text-center">Уровень</th>
+                                    <th class="py-3 text-center pe-4">⭐ Очки</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ratingTableBody">
+                                <!-- Здесь будут данные через JavaScript -->
+                                <tr>
+                                    <td colspan="8" class="text-center py-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Загрузка...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Пагинация -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-10">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" id="pagination">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Предыдущая</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Следующая</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно с подробной статистикой -->
+<div class="modal fade" id="userStatsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-person-circle me-2"></i>
+                    <span id="modalUserName">Статистика игрока</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <div class="avatar-circle mx-auto mb-3" style="width: 100px; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <span class="avatar-text text-white fs-2 fw-bold" id="modalAvatar">--</span>
+                    </div>
+                    <h4 id="modalFullName">Загрузка...</h4>
+                    <p class="text-muted" id="modalClass">-- класс</p>
+                </div>  
+                
+                <div class="mt-4 p-3 bg-light rounded-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">⭐ Всего очков:</span>
+                        <span class="badge bg-primary fs-5" id="modalPoints">0</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <span class="fw-bold">📊 Текущий уровень:</span>
+                        <span class="badge bg-warning fs-5" id="modalLevel">1</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .podium-place {
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+    
+    .podium-place:hover {
+        transform: translateY(-10px);
+        border-color: rgba(255,255,255,0.3);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    .table tbody tr {   
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .table tbody tr:hover {
+        background-color: rgba(102, 126, 234, 0.05);
+        transform: scale(1.01);
+    }
+    
+    .avatar-circle {
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .page-link {
+        color: #667eea;
+        border-radius: 8px;
+        margin: 0 3px;
+    }
+    
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+    }
+    
+    .form-select, .form-control {
+        border-radius: 12px;
+        border: 1px solid #e9ecef;
+        padding: 10px 15px;
+    }
+    
+    .form-select:focus, .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    /* Анимации */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .podium-place, .table tbody tr {
+        animation: fadeInUp 0.5s ease-out;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let userStatsModal = null;
+    let currentRatingData = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Инициализация модального окна
+        const modalElement = document.getElementById('userStatsModal');
+        if (modalElement && typeof bootstrap !== 'undefined') {
+            userStatsModal = new bootstrap.Modal(modalElement);
+        }
+        
+        // Загрузка данных
+        loadRatingData();
+        
+        // Добавляем обработчики для фильтров
+        document.getElementById('classFilter').addEventListener('change', filterAndSortData);
+        document.getElementById('sortFilter').addEventListener('change', filterAndSortData);
+        document.getElementById('searchInput').addEventListener('input', filterAndSortData);
+    });
+
+    async function loadRatingData() {
+        try {
+            // Загружаем топ-3
+            const topResponse = await fetch('/api/get_rating_top3', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                credentials: 'same-origin'
+            });
+            
+            if (topResponse.ok) {
+                const topData = await topResponse.json();
+                updateTop3(topData.top_users);
+            }
+            
+            // Загружаем полный рейтинг
+            const ratingResponse = await fetch('/api/get_rating', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                credentials: 'same-origin'
+            });
+            
+            if (ratingResponse.ok) {
+                const ratingData = await ratingResponse.json();
+                currentRatingData = ratingData.users;
+                filterAndSortData();
+            } else {
+                // Если API не работает, используем тестовые данные
+                loadTestData();
+            }
+            
+        } catch (error) {
+            console.error('Error loading rating:', error);
+            loadTestData();
+        }
+    }
+
+    function loadTestData() {
+        // Тестовые данные для демонстрации
+        currentRatingData = [
+            { position: 1, full_name: 'Иван Петров', user_class: '11', points: 1250, level: 13, study: 85, fun: 45, health: 70, avatar_initials: 'ИП' },
+            { position: 2, full_name: 'Мария Иванова', user_class: '10', points: 980, level: 10, study: 92, fun: 30, health: 85, avatar_initials: 'МИ' },
+            { position: 3, full_name: 'Алексей Сидоров', user_class: '9', points: 850, level: 9, study: 65, fun: 80, health: 55, avatar_initials: 'АС' },
+            { position: 4, full_name: 'Елена Смирнова', user_class: '11', points: 720, level: 8, study: 78, fun: 60, health: 90, avatar_initials: 'ЕС' },
+            { position: 5, full_name: 'Дмитрий Козлов', user_class: '8', points: 650, level: 7, study: 55, fun: 85, health: 75, avatar_initials: 'ДК' },
+            { position: 6, full_name: 'Анна Морозова', user_class: '10', points: 580, level: 6, study: 70, fun: 65, health: 60, avatar_initials: 'АМ' },
+            { position: 7, full_name: 'Сергей Волков', user_class: '7', points: 490, level: 5, study: 45, fun: 75, health: 80, avatar_initials: 'СВ' },
+            { position: 8, full_name: 'Ольга Новикова', user_class: '9', points: 420, level: 5, study: 60, fun: 55, health: 70, avatar_initials: 'ОН' },
+            { position: 9, full_name: 'Павел Федоров', user_class: '8', points: 350, level: 4, study: 50, fun: 70, health: 65, avatar_initials: 'ПФ' },
+            { position: 10, full_name: 'Наталья Мороз', user_class: '6', points: 280, level: 3, study: 80, fun: 40, health: 85, avatar_initials: 'НМ' },
+        ];
+        
+        // Добавляем еще данных для демонстрации
+        for (let i = 11; i <= 25; i++) {
+            currentRatingData.push({
+                position: i,
+                full_name: `Пользователь ${i}`,
+                user_class: String(Math.floor(Math.random() * 7) + 5),
+                points: Math.floor(Math.random() * 300) + 50,
+                level: Math.floor(Math.random() * 5) + 1,
+                study: Math.floor(Math.random() * 100),
+                fun: Math.floor(Math.random() * 100),
+                health: Math.floor(Math.random() * 100),
+                avatar_initials: `П${i}`
+            });
+        }
+        
+        filterAndSortData();
+    }
+
+    function updateTop3(topUsers) {
+        if (topUsers.length >= 1) {
+            document.getElementById('firstName').textContent = topUsers[0].full_name;
+            document.getElementById('firstClass').textContent = topUsers[0].user_class + ' класс';
+            document.getElementById('firstPoints').textContent = topUsers[0].points + ' ⭐';
+            document.getElementById('firstLevel').textContent = 'Ур. ' + topUsers[0].level;
+            document.getElementById('firstAvatar').textContent = topUsers[0].avatar_initials;
+        }
+        
+        if (topUsers.length >= 2) {
+            document.getElementById('secondName').textContent = topUsers[1].full_name;
+            document.getElementById('secondClass').textContent = topUsers[1].user_class + ' класс';
+            document.getElementById('secondPoints').textContent = topUsers[1].points + ' ⭐';
+            document.getElementById('secondLevel').textContent = 'Ур. ' + topUsers[1].level;
+            document.getElementById('secondAvatar').textContent = topUsers[1].avatar_initials;
+        }
+        
+        if (topUsers.length >= 3) {
+            document.getElementById('thirdName').textContent = topUsers[2].full_name;
+            document.getElementById('thirdClass').textContent = topUsers[2].user_class + ' класс';
+            document.getElementById('thirdPoints').textContent = topUsers[2].points + ' ⭐';
+            document.getElementById('thirdLevel').textContent = 'Ур. ' + topUsers[2].level;
+            document.getElementById('thirdAvatar').textContent = topUsers[2].avatar_initials;
+        }
+    }
+
+    function filterAndSortData() {
+        const classFilter = document.getElementById('classFilter').value;
+        const sortFilter = document.getElementById('sortFilter').value;
+        const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+        
+        // Фильтрация
+        let filteredData = currentRatingData.filter(user => {
+            // Фильтр по классу
+            if (classFilter !== 'all' && user.user_class !== classFilter) {
+                return false;
+            }
+            
+            // Фильтр по поиску
+            if (searchQuery && !user.full_name.toLowerCase().includes(searchQuery)) {
+                return false;
+            }
+            
+            return true;
+        });
+        
+        // Сортировка
+        filteredData.sort((a, b) => {
+            switch(sortFilter) {
+                case 'points':
+                    return b.points - a.points;
+                case 'level':
+                    return b.level - a.level;
+                case 'name':
+                    return a.full_name.localeCompare(b.full_name);
+                default:
+                    return b.points - a.points;
+            }
+        });
+        
+        // Обновляем позиции после сортировки
+        filteredData.forEach((user, index) => {
+            user.position = index + 1;
+        });
+        
+        // Отображаем данные
+        displayRatingTable(filteredData);
+    }
+
+    function displayRatingTable(users) {
+        const tbody = document.getElementById('ratingTableBody');
+        
+        if (users.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center py-5">
+                        <i class="bi bi-emoji-frown fs-1 text-muted d-block mb-3"></i>
+                        <h5 class="text-muted">Ничего не найдено</h5>
+                        <p class="text-muted small">Попробуйте изменить параметры поиска</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        // Пагинация
+        const start = (currentPage - 1) * itemsPerPage;
+        const paginatedUsers = users.slice(start, start + itemsPerPage);
+        
+        tbody.innerHTML = paginatedUsers.map(user => `
+            <tr onclick="showUserStats(${JSON.stringify(user).replace(/"/g, '&quot;')})">
+                <td class="ps-4">
+                    <span class="fw-bold">${user.position}</span>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-circle me-3" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <span class="avatar-text text-white fw-bold">${user.avatar_initials}</span>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">${user.full_name}</h6>
+                        </div>
+                    </div>
+                </td>
+                <td>${user.user_class} класс</td>
+                <td class="text-center">
+                    <span class="badge bg-warning bg-opacity-25 text-warning px-3 py-2">
+                        ${user.level}
+                    </span>
+                </td>
+                <td class="text-center pe-4">
+                    <span class="badge bg-primary bg-opacity-10 text-primary fs-6 px-3 py-2">
+                        ⭐ ${user.points}
+                    </span>
+                </td>
+            </tr>
+        `).join('');
+        
+        // Обновляем пагинацию
+        updatePagination(users.length);
+    }
+
+    function updatePagination(totalItems) {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const pagination = document.getElementById('pagination');
+        
+        let html = `
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${currentPage - 1}); return false;">Предыдущая</a>
+            </li>
+        `;
+        
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                html += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
+                    </li>
+                `;
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                html += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+            }
+        }
+        
+        html += `
+            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${currentPage + 1}); return false;">Следующая</a>
+            </li>
+        `;
+        
+        pagination.innerHTML = html;
+    }
+
+    window.changePage = function(page) {
+        currentPage = page;
+        filterAndSortData();
+    };
+
+    window.showUserStats = function(user) {
+        document.getElementById('modalUserName').textContent = user.full_name;
+        document.getElementById('modalFullName').textContent = user.full_name;
+        document.getElementById('modalClass').textContent = user.user_class + ' класс';
+        document.getElementById('modalAvatar').textContent = user.avatar_initials;
+        document.getElementById('modalPoints').textContent = user.points + ' ⭐';
+        document.getElementById('modalLevel').textContent = user.level;
+        
+        if (userStatsModal) {
+            userStatsModal.show();
+        }
+    };
+
+    window.getCsrfToken = function() {
+        return document.querySelector('[name=csrf-token]').getAttribute('content');
+    };
+</script>
+{% endblock %}

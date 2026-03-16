@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Вопрос{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <!-- Заголовок с компактными характеристиками справа -->
+        <div class="d-flex justify-content-between align-items-center mb-3" id="statsHeader">
+            <h4 class="mb-0">
+                <i class="bi bi-question-circle me-2"></i>
+            </h4>
+            
+            <!-- Компактный блок характеристик -->
+            <div class="d-flex gap-2">
+                <div class="stat-badge" title="Учеба">
+                    <span class="badge bg-warning bg-opacity-10 text-warning px-2 py-1 fs-5">
+                        📚 <span id="currentStudy" class="fw-bold">0</span>
+                    </span>
+                </div>
+                <div class="stat-badge" title="Развлечения">
+                    <span class="badge bg-success bg-opacity-10 text-success px-2 py-1 fs-5">
+                        🎮 <span id="currentFun" class="fw-bold">0</span>
+                    </span>
+                </div>
+                <div class="stat-badge" title="Здоровье">
+                    <span class="badge bg-info bg-opacity-10 text-info px-2 py-1 fs-5">
+                        💪 <span id="currentHealth" class="fw-bold">0</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Загрузка...</span>
+            </div>
+            <p class="mt-3">Загрузка вопроса...</p>
+        </div>
+        
+        <div id="questionContainer" class="d-none">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <span class="badge bg-info mb-2" id="categoryBadge">Категория</span>
+                        <h2 class="card-title fw-bold text-primary" id="questionText">Текст вопроса..?</h2>
+                        <p class="text-muted">Выберите наиболее предпочитаемый вариант</p>
+                    </div>
+                    
+                    <div class="options-container" id="optionsContainer"></div>
+                    
+                    <div class="text-center mt-4">
+                        <button type="button" class="btn btn-dark btn-lg px-5" id="submitBtn" disabled onclick="submitAnswer()">
+                            Ответить на вопрос
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="successToast" class="toast" role="alert">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto">Успех!</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            Ответ принят!
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для предупреждений -->
+<div class="modal fade" id="warningModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">Внимание!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="warningMessage">
+                Некоторые характеристики достигли предела
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let currentQuestionId = null;
+    let selectedAnswerId = null;
+    let toast = null;
+    let warningModal = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        toast = new bootstrap.Toast(document.getElementById('successToast'));
+        warningModal = new bootstrap.Modal(document.getElementById('warningModal'));
+        
+        // Сначала загружаем характеристики пользователя
+        loadUserStats().then(() => {
+            loadQuestion();
+        });
+    });
+
+    async function loadUserStats() {
+        try {
+            const response = await fetch('/api/get_statistik', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                credentials: 'same-origin'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                updateStats(data);
+            }
+        } catch (error) {
+            console.error('Error loading user stats:', error);
+        }
+    }
+
+    function updateStats(data) {
+        document.getElementById('currentStudy').textContent = data.stats.study;
+        document.getElementById('currentFun').textContent = data.stats.fun;
+        document.getElementById('currentHealth').textContent = data.stats.health;
+    }
+
+    async function loadQuestion() {
+        showLoading(true);
+
+        try {
+            const response = await fetch('/api/get_question', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                credentials: 'same-origin'
+            });
+
+            if (response.status === 401) {
+                alert('Сессия истекла. Пожалуйста, войдите снова.');
+                window.location.href = '/signin/';
+                return;
+            }
+
+            const data = await response.json();
+
+            if (response.ok) {
+                displayQuestion(data);
+            } else {
+                console.error('Error:', data.error);
+                alert('Ошибка: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            alert('Сетевая ошибка. Проверьте подключение к серверу.');
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    function getEffectClass(change) {
+        if (change > 0) return 'text-success';
+        if (change < 0) return 'text-danger';
+        return 'text-muted';
+    }
+
+    function getEffectIcon(change) {
+        if (change > 0) return '▲';
+        if (change < 0) return '▼';
+        return '●';
+    }
+
+    function displayQuestion(data) {
+        currentQuestionId = data.question.id;
+
+        document.getElementById('questionText').textContent = data.question.text;
+        document.getElementById('categoryBadge').textContent = data.question.category;
+
+        const optionsContainer = document.getElementById('optionsContainer');
+        optionsContainer.innerHTML = '';
+
+        data.options.forEach(option => {
+            const optionId = `option${option.letter}`;
+            const effects = option.effects;
+            
+            // Создаем HTML для отображения изменений характеристик
+            const effectsHtml = `
+                <div class="d-flex gap-3 ms-auto" style="font-size: 9pt;">
+                    <span class="${getEffectClass(effects.study)}" title="Учеба">
+                        📚 ${getEffectIcon(effects.study)} ${effects.study > 0 ? '+' : ''}${effects.study}
+                    </span>
+                    <span class="${getEffectClass(effects.fun)}" title="Развлечения">
+                        🎮 ${getEffectIcon(effects.fun)} ${effects.fun > 0 ? '+' : ''}${effects.fun}
+                    </span>
+                    <span class="${getEffectClass(effects.health)}" title="Здоровье">
+                        💪 ${getEffectIcon(effects.health)} ${effects.health > 0 ? '+' : ''}${effects.health}
+                    </span>
+                </div>
+            `;
+
+            const optionElement = document.createElement('div');
+            optionElement.className = 'option-item mb-3';
+            optionElement.innerHTML = `
+                <input type="radio" class="btn-check" name="options" id="${optionId}" autocomplete="off" value="${option.id}">
+                <label class="btn btn-outline-secondary w-100 p-3 text-start d-flex align-items-center" for="${optionId}">
+                    <span class="option-badge bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" 
+                          style="width: 30px; height: 30px;">${option.letter}</span>
+                    <span class="flex-grow-1">${option.text}</span>
+                    ${effectsHtml}
+                </label>
+            `;
+            
+            optionElement.querySelector('input').addEventListener('change', function(e) {
+                selectedAnswerId = parseInt(e.target.value);
+                document.getElementById('submitBtn').disabled = false;
+                
+                // Подсвечиваем выбранный вариант
+                document.querySelectorAll('.option-item .btn').forEach(btn => {
+                    btn.classList.remove('btn-primary', 'text-white');
+                });
+                e.target.nextElementSibling.classList.add('btn-primary', 'text-white');
+            });
+            
+            optionsContainer.appendChild(optionElement);
+        });
+
+        selectedAnswerId = null;
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('questionContainer').classList.remove('d-none');
+    }
+
+    function showLoading(show) {
+        const loading = document.getElementById('loading');
+        const questionContainer = document.getElementById('questionContainer');
+
+        loading.classList.toggle('d-none', !show);
+        if (!show) {
+            questionContainer.classList.remove('d-none');
+        }
+    }
+
+    async function submitAnswer() {
+        if (!selectedAnswerId || !currentQuestionId) {
+            alert('Выберите вариант ответа');
+            return;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Отправка...';
+
+        try {
+            const response = await fetch('/api/submit_answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    answer_id: selectedAnswerId,
+                    question_id: currentQuestionId
+                })
+            });
+
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Обновляем отображаемые характеристики
+                if (data.current_stats) {
+                    document.getElementById('currentStudy').textContent = data.current_stats.study;
+                    document.getElementById('currentFun').textContent = data.current_stats.fun;
+                    document.getElementById('currentHealth').textContent = data.current_stats.health;
+                }
+
+                // Показываем предупреждения, если есть
+                if (data.warnings && Object.keys(data.warnings).length > 0) {
+                    const warningsList = [];
+                    if (data.warnings.study) warningsList.push('Учеба достигла предела');
+                    if (data.warnings.fun) warningsList.push('Развлечения достигли предела');
+                    if (data.warnings.health) warningsList.push('Здоровье достигло предела');
+                    
+                    document.getElementById('warningMessage').innerHTML = warningsList.join('<br>');
+                    warningModal.show();
+                } else {
+                    toast.show();
+                }
+                
+                // Перенаправляем на главную через 2 секунды
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
+            } else {
+                alert('Ошибка: ' + (data.error || 'Неизвестная ошибка'));
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Ответить на вопрос';
+            }
+        } catch (error) {
+            alert('Ошибка сети: ' + error.message);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Ответить на вопрос';
+        }
+    }
+</script>
+
+<style>
+    .stat-badge {
+        transition: transform 0.2s;
+    }
+    
+    .stat-badge:hover {
+        transform: translateY(-2px);
+    }
+    
+    .option-item .btn {
+        transition: all 0.3s ease;
+    }
+    
+    .option-item .btn:hover {
+        transform: translateX(5px);
+        background-color: #e9ecef;
+    }
+    
+    .option-item .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+    }
+    
+    .option-item .btn-primary .option-badge {
+        background-color: rgba(255,255,255,0.2) !important;
+    }
+    
+    .option-item .btn-primary .text-success,
+    .option-item .btn-primary .text-danger,
+    .option-item .btn-primary .text-muted {
+        color: white !important;
+    }
+    
+    .toast-container {
+        z-index: 1050;
+    }
+</style>
+{% endblock %}

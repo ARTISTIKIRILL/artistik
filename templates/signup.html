@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">РЕГИСТРАЦИЯ</h2>
+                
+                <div class="mb-3">
+                    <label class="form-label">Логин</label>
+                    <input class="form-control" id="login" placeholder="Derector228">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Имя</label>
+                    <input class="form-control" id="name" placeholder="Миша">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Фамилия</label>
+                    <input class="form-control" id="surname" placeholder="Герасимов">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Класс</label>
+                    <select class="form-select" id="user_class">
+                        <option selected value="">Выберете класс</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="teacher">Учитель</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-control" id="password" placeholder="**********">
+                    <div class="form-text">Длина пароля должна составлять 8-20 символов.</div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">Подтверждение пароля</label>
+                    <input type="password" class="form-control" id="password2" placeholder="**********">
+                    <div class="form-text">Длина пароля должна составлять 8-20 символов.</div>
+                </div>
+                
+                <div class="text-center">
+                    <button type="button" id="signupBtn" class="btn btn-dark px-5">
+                        Зарегистрироваться
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('signupBtn').addEventListener('click', async function() {
+            const login = document.getElementById('login').value;
+            const name = document.getElementById('name').value;
+            const surname = document.getElementById('surname').value;
+            const user_class = document.getElementById('user_class').value;
+            const password = document.getElementById('password').value;
+            const password2 = document.getElementById('password2').value;
+            
+            if (password !== password2) {
+                alert("Пароли не совпадают");
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCsrfToken()
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({ 
+                        login, 
+                        name, 
+                        surname, 
+                        user_class, 
+                        password,
+                        password2 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    alert(data.error || "Ошибка регистрации");
+                    return;
+                }
+                
+                window.location.href = "{% url 'signin_page' %}";
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Ошибка подключения к серверу");
+            }
+        });
+    });
+</script>
+{% endblock %}

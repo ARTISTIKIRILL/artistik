@@ -1,0 +1,648 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card shadow-sm border-0">
+            <div class="row align-items-center p-4">
+                <div class="col-md-7">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-circle me-4" style="width: 80px; height: 80px;">
+                            <span class="avatar-text text-white fs-3 fw-bold" id="avatarInitials">МП</span>
+                        </div>
+                        <div>
+                            <h2 class="text-dark mb-1 fw-bold" id="userFullName">Герасимов Кирилл</h2>
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2 rounded-pill fw-normal">
+                                    <i class="bi bi-mortarboard"></i> 
+                                    <span id="userClassInfo">9М класс</span>
+                                </span>
+                                <div class="level-display">
+                                    <span class="badge bg-warning bg-opacity-10 text-dark px-3 py-2 rounded-pill">
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                        <span class="fw-bold" id="levelText">Уровень 2</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-5 text-end">
+                    <div class="points-display">
+                        <div class="d-inline-block bg-light rounded-3 px-4 py-3">
+                            <div class="text-muted mb-1 small">⭐ Всего очков</div>
+                            <div class="fw-bold fs-3 text-dark" id="pointsInfo">1 300</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-0">
+                <div class="col-md-5 p-4">
+                    <div class="text-center">
+                        <div class="mb-4">
+                            {% load static %}
+                            <img src="https://i.yapx.ru/dHZ18.png" alt="Аватар ученика" class="img-fluid rounded-3" style="max-height: 300px;">
+                        </div>
+                        
+                        <div class="level-progress-section bg-light rounded-3 p-3">
+                            <h5 class="text-dark mb-3">
+                                <i class="bi bi-trophy me-2 text-warning"></i>Прогресс уровня
+                            </h5>
+                            <div class="progress mb-2" style="height: 12px; border-radius: 6px;">
+                                <div id="levelProgressBar" class="progress-bar" 
+                                    style="width: 45%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between small">
+                                <span id="progressPercent" class="text-muted">45%</span>
+                                <span id="nextLevelInfo" class="text-dark fw-semibold">До 3 уровня: 200 очков</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7 p-4">
+                    <div class="mb-4">
+                        <h4 class="text-dark mb-2">
+                            <i class="bi bi-bar-chart me-2"></i>
+                            Мои характеристики
+                        </h4>
+                        <p class="text-muted small">Баланс характеристик влияет на успеваемость и самочувствие</p>
+                    </div>
+
+                    <div class="characteristic-item mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex align-items-center">
+                                <div class="characteristic-icon me-3">
+                                    <div class="icon-wrapper bg-warning bg-opacity-10 p-2 rounded-3">
+                                        <span class="fs-4">📚</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-semibold text-dark">Учеба</h6>
+                                    <small class="text-muted">Домашнее задание и уроки в школе</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold fs-4 text-warning" id="studyPercent">75%</div>
+                                <div class="small text-muted">Уровень</div>
+                            </div>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 5px;">
+                            <div id="studyBar" class="progress-bar bg-warning" style="width: 75%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-1">
+                            <small class="text-muted">Двоечник</small>
+                            <small class="text-muted">Отличник</small>
+                        </div>
+                    </div>
+
+                    <div class="characteristic-item mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex align-items-center">
+                                <div class="characteristic-icon me-3">
+                                    <div class="icon-wrapper bg-success bg-opacity-10 p-2 rounded-3">
+                                        <span class="fs-4">🎮</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-semibold text-dark">Развлечения</h6>
+                                    <small class="text-muted">Игры и общение с друзьями</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold fs-4 text-success" id="funPercent">75%</div>
+                                <div class="small text-muted">Уровень</div>
+                            </div>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 5px;">
+                            <div id="funBar" class="progress-bar bg-success" style="width: 75%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-1">
+                            <small class="text-muted">Скучно</small>
+                            <small class="text-muted">Весело</small>
+                        </div>
+                    </div>
+
+                    <div class="characteristic-item mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex align-items-center">
+                                <div class="characteristic-icon me-3">
+                                    <div class="icon-wrapper bg-info bg-opacity-10 p-2 rounded-3">
+                                        <span class="fs-4">💪</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-semibold text-dark">Жизненные силы</h6>
+                                    <small class="text-muted">Физическая форма и самочувствие</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold fs-4 text-info" id="healthPercent">75%</div>
+                                <div class="small text-muted">Уровень</div>
+                            </div>
+                        </div>
+                        <div class="progress" style="height: 10px; border-radius: 5px;">
+                            <div id="healthBar" class="progress-bar bg-info" style="width: 75%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-1">
+                            <small class="text-muted">Уставший</small>
+                            <small class="text-muted">Полон энергии</small>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5 pt-3">
+                        <a href="{% url 'question_page' %}" class="btn btn-primary btn-lg px-5 py-3 fw-semibold">
+                            <i class="bi bi-house-door"></i>Пойти в школу
+                        </a>
+                        <p class="text-muted small mt-2">Начните новый учебный день</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для уведомлений -->
+<div class="modal fade" id="notificationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Уведомление</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="notificationMessage">
+                Добро пожаловать!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Красивое модальное окно проигрыша -->
+<div class="modal fade" id="gameOverModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 overflow-hidden" style="border-radius: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="modal-body p-0">
+                <div class="position-relative">
+                    <!-- Анимированный фон -->
+                    <div class="position-absolute top-0 start-0 w-100 h-100 opacity-10">
+                        <div class="position-absolute" style="top: 10%; left: 10%; animation: float 3s ease-in-out infinite;">💀</div>
+                        <div class="position-absolute" style="bottom: 10%; right: 10%; animation: float 4s ease-in-out infinite;">⚡</div>
+                        <div class="position-absolute" style="top: 20%; right: 20%; animation: float 5s ease-in-out infinite;">📉</div>
+                    </div>
+                    
+                    <!-- Контент -->
+                    <div class="text-center text-white p-5 position-relative">
+                        <div class="mb-4">
+                            <span class="display-1 d-block animate__animated animate__bounceIn">😵</span>
+                        </div>
+                        
+                        <h2 class="fw-bold mb-3 animate__animated animate__fadeInDown" style="font-size: 2.5rem;">
+                            Игра окончена!
+                        </h2>
+                        
+                        <div class="mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                            <p class="fs-5 mb-2">Одна из ваших характеристик достигла нуля</p>
+                            <div class="d-flex justify-content-center gap-4 mt-3" id="zeroStats">
+                                <!-- Здесь будут отображаться обнулившиеся характеристики -->
+                            </div>
+                        </div>
+                        
+                        <!-- <div class="bg-white bg-opacity-20 rounded-4 p-4 mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+                            <p class="fs-4 mb-2 fw-semibold">Штраф: -30 очков</p>
+                            <p class="mb-0 small opacity-75">Все характеристики восстановлены до 40</p>
+                            <div class="d-flex justify-content-center align-items-center gap-2 mt-2">
+                                <span class="badge bg-danger bg-opacity-75 px-3 py-2 fs-6">
+                                    ⭐ <span id="lostPoints">30</span> очков
+                                </span>
+                            </div>
+                        </div> -->
+                        
+                        <button type="button" class="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-lg animate__animated animate__fadeInUp" 
+                                style="animation-delay: 0.9s; font-weight: 600; color: #667eea;"
+                                onclick="restartGame()">
+                            <i class="bi bi-arrow-repeat me-2"></i>
+                            Начать заново
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно загрузки -->
+<div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content text-center p-4">
+            <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Загрузка...</span>
+            </div>
+            <h5 class="mb-0">Перезапуск игры...</h5>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .bg-opacity-20 {
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+    }
+    
+    /* Анимации для модального окна */
+    .modal.fade .modal-dialog {
+        transform: scale(0.8);
+        transition: transform 0.3s ease-in-out;
+    }
+    
+    .modal.show .modal-dialog {
+        transform: scale(1);
+    }
+</style>
+
+<!-- Подключаем animate.css для красивых анимаций -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let notificationModal = null;
+    let gameOverModal = null;
+    let loadingModal = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Инициализация модальных окон
+        const notificationElement = document.getElementById('notificationModal');
+        const gameOverElement = document.getElementById('gameOverModal');
+        const loadingElement = document.getElementById('loadingModal');
+        
+        if (notificationElement && typeof bootstrap !== 'undefined') {
+            notificationModal = new bootstrap.Modal(notificationElement, {
+                backdrop: true,
+                keyboard: true,
+                focus: true
+            });
+        }
+        
+        if (gameOverElement && typeof bootstrap !== 'undefined') {
+            gameOverModal = new bootstrap.Modal(gameOverElement, {
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+        
+        if (loadingElement && typeof bootstrap !== 'undefined') {
+            loadingModal = new bootstrap.Modal(loadingElement, {
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+        
+        // Проверка авторизации и загрузка данных
+        checkAuthAndLoadData();
+        
+        // Автоматическое обновление каждую минуту
+        setInterval(loadData, 60000);
+    });
+
+    // Выносим функции в глобальную область видимости
+    window.checkAuthAndLoadData = async function() {
+        try {
+            console.log("Привет");
+            const authResponse = await fetch('/api/check_auth', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                credentials: 'same-origin'
+            });
+
+            const authData = await authResponse.json();
+
+            if (!authData.authenticated) {
+                showNotification('Вы не авторизованы. Перенаправление на страницу входа...');
+                setTimeout(() => {
+                    window.location.href = "{% url 'signin_page' %}";
+                }, 3000);
+                return;
+            }
+
+            await loadData();
+            
+        } catch (error) {
+            console.error('Auth check error:', error);
+            showNotification('Ошибка проверки авторизации');
+        }
+    };
+
+    window.loadData = async function() {
+        try {
+            const response = await fetch('/api/get_statistik', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                credentials: 'same-origin'
+            });
+
+            if (response.status === 401) {
+                showNotification('Сессия истекла. Пожалуйста, войдите снова.');
+                setTimeout(() => {
+                    window.location.href = "{% url 'signin_page' %}";
+                }, 2000);
+                return;
+            }
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                updateUI(data);
+                
+                // Проверяем, не проиграл ли пользователь
+                checkGameOver(data.stats);
+            } else {
+                console.error('Failed to load data:', response.status);
+                await loadTestData();
+            }
+        } catch (error) {
+            console.error('Error loading data:', error);
+            await loadTestData();
+        }
+    };
+
+    window.loadTestData = async function() {
+        try {
+            const response = await fetch('/api/get_statistik1', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                credentials: 'same-origin'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                updateUI(data);
+                console.log('Using test data');
+            }
+        } catch (error) {
+            console.error('Error loading test data:', error);
+        }
+    };
+
+    window.checkGameOver = function(stats) {
+        const zeroStats = [];
+        const statNames = {
+            study: { name: 'Учеба', icon: '📚', color: 'warning' },
+            fun: { name: 'Развлечения', icon: '🎮', color: 'success' },
+            health: { name: 'Здоровье', icon: '💪', color: 'info' }
+        };
+        
+        if (stats.study <= 0) zeroStats.push(statNames.study);
+        if (stats.fun <= 0) zeroStats.push(statNames.fun);
+        if (stats.health <= 0) zeroStats.push(statNames.health);
+        
+        if (zeroStats.length > 0 && gameOverModal) {
+            // Отображаем обнулившиеся характеристики
+            const zeroStatsContainer = document.getElementById('zeroStats');
+            zeroStatsContainer.innerHTML = zeroStats.map(stat => `
+                <div class="text-center">
+                    <span class="display-6 d-block">${stat.icon}</span>
+                    <span class="badge bg-${stat.color} bg-opacity-75 mt-2 px-3 py-2">
+                        ${stat.name}
+                    </span>
+                </div>
+            `).join('');
+            
+            gameOverModal.show();
+        }
+    };
+
+    window.restartGame = async function() {
+        try {
+            // Сначала скрываем gameOverModal если он открыт
+            if (gameOverModal) {
+                gameOverModal.hide();
+            }
+            
+            // Небольшая задержка для закрытия предыдущего модального окна
+            await new Promise(resolve => setTimeout(resolve, 300));
+            
+            // Отправляем запрос на сервер для рестарта игры
+            const response = await fetch('/api/restart_game', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                credentials: 'same-origin'
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Обновляем UI с новыми данными
+                document.getElementById('pointsInfo').textContent = data.points.toLocaleString('ru-RU');
+                document.getElementById('studyPercent').textContent = data.stats.study + '%';
+                document.getElementById('funPercent').textContent = data.stats.fun + '%';
+                document.getElementById('healthPercent').textContent = data.stats.health + '%';
+                
+                // Обновляем прогресс-бары
+                document.getElementById('studyBar').style.width = data.stats.study + '%';
+                document.getElementById('studyBar').setAttribute('aria-valuenow', data.stats.study);
+                document.getElementById('funBar').style.width = data.stats.fun + '%';
+                document.getElementById('funBar').setAttribute('aria-valuenow', data.stats.fun);
+                document.getElementById('healthBar').style.width = data.stats.health + '%';
+                document.getElementById('healthBar').setAttribute('aria-valuenow', data.stats.health);
+                
+                // Обновляем уровень
+                const newLevel = Math.floor(data.points / 100) + 1;
+                document.getElementById('levelText').textContent = newLevel + ' уровень';
+                
+                // Обновляем прогресс уровня
+                const progressPercent = (data.points % 100);
+                document.getElementById('levelProgressBar').style.width = progressPercent + '%';
+                document.getElementById('levelProgressBar').setAttribute('aria-valuenow', progressPercent);
+                document.getElementById('progressPercent').textContent = Math.round(progressPercent) + '%';
+                
+                const pointsToNextLevel = (newLevel * 100) - data.points;
+                document.getElementById('nextLevelInfo').textContent = 
+                    `До ${newLevel + 1} уровня: ${pointsToNextLevel.toLocaleString('ru-RU')} очков`;
+                
+                // Обновляем цвета прогресс-баров
+                updateProgressBarColors(data.stats.study, data.stats.fun, data.stats.health);
+                
+                // Обновляем инициалы (если нужно)
+                const firstName = document.getElementById('userFullName').textContent.split(' ')[0] || '';
+                const lastName = document.getElementById('userFullName').textContent.split(' ')[1] || '';
+                const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+                document.getElementById('avatarInitials').textContent = initials || '--';
+                
+                // Закрываем модальное окно загрузки
+                if (loadingModal) {
+                    loadingModal.hide();
+                }
+                
+                // Показываем уведомление об успешном рестарте с возможностью закрытия
+                setTimeout(() => {
+                    showNotification('Игра перезапущена! Характеристики восстановлены до 40.');
+                }, 300);
+                
+            } else {
+                throw new Error(data.error || 'Ошибка при перезапуске игры');
+            }
+            
+        } catch (error) {
+            console.error('Restart error:', error);
+            if (loadingModal) {
+                loadingModal.hide();
+            }
+            showNotification('Ошибка при перезапуске игры: ' + error.message);
+        }
+    };
+
+    window.updateUI = function(data) {
+        console.log(data);
+        document.getElementById('userFullName').textContent = `${data.user.name} ${data.user.surname}`;
+        document.getElementById('userClassInfo').textContent = data.user.user_class + " класс" || '-- класс';
+        
+        const firstName = data.user.name || '';
+        const lastName = data.user.surname || '';
+        const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+        document.getElementById('avatarInitials').textContent = initials || '--';
+        
+        document.getElementById('levelText').textContent = `${data.level.current_level} уровень`;
+        document.getElementById('pointsInfo').textContent = data.level.points.toLocaleString('ru-RU');
+        
+        const progressPercent = data.level.progress_percentage || 0;
+        document.getElementById('levelProgressBar').style.width = `${progressPercent}%`;
+        document.getElementById('levelProgressBar').setAttribute('aria-valuenow', progressPercent);
+        document.getElementById('progressPercent').textContent = `${Math.round(progressPercent)}%`;
+        
+        const pointsToNextLevel = data.level.max_level_points - data.level.points;
+        document.getElementById('nextLevelInfo').textContent = 
+            `До ${data.level.current_level + 1} уровня: ${pointsToNextLevel.toLocaleString('ru-RU')} очков`;
+        
+        const stats = data.stats || {};
+        
+        const studyValue = Math.min(100, Math.max(0, stats.study || 0));
+        document.getElementById('studyPercent').textContent = `${studyValue}%`;
+        document.getElementById('studyBar').style.width = `${studyValue}%`;
+        document.getElementById('studyBar').setAttribute('aria-valuenow', studyValue);
+        
+        const funValue = Math.min(100, Math.max(0, stats.fun || 0));
+        document.getElementById('funPercent').textContent = `${funValue}%`;
+        document.getElementById('funBar').style.width = `${funValue}%`;
+        document.getElementById('funBar').setAttribute('aria-valuenow', funValue);
+        
+        const healthValue = Math.min(100, Math.max(0, stats.health || 0));
+        document.getElementById('healthPercent').textContent = `${healthValue}%`;
+        document.getElementById('healthBar').style.width = `${healthValue}%`;
+        document.getElementById('healthBar').setAttribute('aria-valuenow', healthValue);
+        
+        updateProgressBarColors(studyValue, funValue, healthValue);
+    };
+
+    window.updateProgressBarColors = function(study, fun, health) {
+        // Учеба
+        const studyBar = document.getElementById('studyBar');
+        studyBar.classList.remove('bg-warning', 'bg-danger', 'bg-success');
+        if (study < 30) {
+            studyBar.classList.add('bg-danger');
+        } else if (study > 70) {
+            studyBar.classList.add('bg-success');
+        } else {
+            studyBar.classList.add('bg-warning');
+        }
+        
+        // Развлечения
+        const funBar = document.getElementById('funBar');
+        funBar.classList.remove('bg-success', 'bg-danger');
+        if (fun < 30) {
+            funBar.classList.add('bg-danger');
+        } else if (fun > 70) {
+            funBar.classList.add('bg-success');
+        } else {
+            funBar.classList.add('bg-success');
+        }
+        
+        // Здоровье
+        const healthBar = document.getElementById('healthBar');
+        healthBar.classList.remove('bg-info', 'bg-danger', 'bg-success');
+        if (health < 30) {
+            healthBar.classList.add('bg-danger');
+        } else if (health > 70) {
+            healthBar.classList.add('bg-success');
+        } else {
+            healthBar.classList.add('bg-info');
+        }
+    };
+
+    window.showNotification = function(message) {
+        const messageElement = document.getElementById('notificationMessage');
+        if (messageElement) {
+            messageElement.textContent = message;
+        }
+        
+        if (notificationModal) {
+            // Убеждаемся, что модальное окно уведомления не конфликтует с другими
+            setTimeout(() => {
+                notificationModal.show();
+            }, 100);
+        } else {
+            alert(message);
+        }
+    };
+
+    window.logout = async function() {
+        try {
+            const response = await fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                credentials: 'same-origin'
+            });
+            
+            if (response.ok) {
+                window.location.href = "{% url 'signin_page' %}";
+            } else {
+                showNotification('Ошибка при выходе из аккаунта');
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            showNotification('Ошибка сети при выходе из аккаунта');
+        }
+    };
+
+    // Функция getCsrfToken должна быть в глобальной области
+    window.getCsrfToken = function() {
+        return document.querySelector('[name=csrf-token]').getAttribute('content');
+    };
+
+    // Добавляем обработчик для закрытия модальных окон по кнопке
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('btn-close') || event.target.classList.contains('btn-primary')) {
+            if (notificationModal) {
+                notificationModal.hide();
+            }
+        }
+    });
+</script>
+{% endblock %}
